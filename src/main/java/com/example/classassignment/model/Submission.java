@@ -1,5 +1,6 @@
 package com.example.classassignment.model;
 
+import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -18,6 +19,15 @@ public class Submission {
     @Column(name = "submitted_at")
     private LocalDate submittedAt;
 
+    @Lob
+    @Column(columnDefinition = "BLOB")
+    private byte[] submittedFile;
+
+    @Column
+    private String fileName;
+    @Column
+    private String fileType;
+
     @Column(name = "approved", columnDefinition ="boolean default false")
     private boolean approved;
 
@@ -29,16 +39,36 @@ public class Submission {
     @ManyToOne(fetch = FetchType.LAZY,targetEntity = User.class)
     private User student;
 
-    public Submission(Integer submissionId, Integer score, LocalDate submittedAt, boolean approved, Assignment assignment, User student) {
+    public Submission(Integer submissionId, Integer score, LocalDate submittedAt, byte[] submittedFile, String fileName, String fileType, boolean approved, Assignment assignment, User student) {
         this.submissionId = submissionId;
         this.score = score;
         this.submittedAt = submittedAt;
+        this.submittedFile = submittedFile;
+        this.fileName = fileName;
+        this.fileType = fileType;
         this.approved = approved;
         this.assignment = assignment;
         this.student = student;
     }
+
     public Submission(){
 
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
     }
 
     public boolean isApproved() {
@@ -75,6 +105,14 @@ public class Submission {
 
     public void setScore(Integer score) {
         this.score = score;
+    }
+
+    public byte[] getSubmittedFile() {
+        return submittedFile;
+    }
+
+    public void setSubmittedFile(byte[] submittedFile) {
+        this.submittedFile = submittedFile;
     }
 
     public LocalDate getSubmittedAt() {
